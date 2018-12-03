@@ -194,6 +194,40 @@ class HarborClient(object):
                     username, response.status_code))
         return result
 
+    # GET /repositories/{repo_name}/tags/{tag}/labels
+    def get_tag_labels(self, repository, tag):
+        result = None 
+        path = '%s://%s/api/repositories/%s/tags/%s/labels' % (self.protocol, self.host, repository, tag)
+
+        response = requests.get(path,
+                                cookies={'beegosessionID': self.session_id})
+        if response.status_code == 200:
+            result = response.json()
+            logging.debug("Successfully fetched label")
+        else:
+            logging.error(
+                "Failed to retrieve label on {}/{}, response code: {}".format(
+                    repository, tag, response.status_code))
+        return result
+
+    # POST /repositories/{repo_name}/tags/{tag}/labels
+    def create_tag_label(self, repository, tag, label_id):
+        result = False
+        path = '%s://%s/api/repositories/%s/tags/%s/labels' % (self.protocol, self.host, repository, tag)
+
+        request_body = {"id": label_id}
+        response = requests.post(path,
+                                 cookies={'beegosessionID': self.session_id},
+                                 json=request_body)
+        if response.status_code == 200:
+            result = True
+            logging.debug("Successfully created label")
+        else:
+            logging.error(
+                "Fail to create label on tag: {}, response code: {}".format(
+                    tag, response.status_code))
+        return result
+
     # PUT /users/{user_id}
     def update_user_profile(self, user_id, email, realname, comment):
         # TODO: support not passing comment
