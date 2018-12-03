@@ -339,7 +339,24 @@ class HarborClient(object):
             logging.error("Fail to delete repository: {}".format(repo_name))
         return result
 
-    # Get /repositories/tags
+    # DELETE /repositories/{repo_name}/tags/{tag}
+    def delete_repository_tag(self, repo_name, tag):
+        result = False
+        path = '%s://%s/api/repositories/%s/tags/%s' % (
+            self.protocol, self.host, repo_name, tag)
+        response = requests.delete(path,
+                                cookies={'beegosessionID': self.session_id})
+        if response.status_code == 200:
+            result = True
+            logging.debug(
+                "Successfully deleted tag : {}:{}".format(
+                    repo_name, tag))
+        else:
+            logging.error("Fail to get tags with repo name: {}".format(
+                repo_name))
+        return result
+
+    # Get /repositories/{repo_name}/tags
     def get_repository_tags(self, repo_name):
         result = None
         path = '%s://%s/api/repositories/%s/tags' % (
