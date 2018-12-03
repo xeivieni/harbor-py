@@ -308,7 +308,7 @@ class HarborClient(object):
     # Get /repositories/tags
     def get_repository_tags(self, repo_name):
         result = None
-        path = '%s://%s/api/repositories/tags?repo_name=%s' % (
+        path = '%s://%s/api/repositories/%s/tags' % (
             self.protocol, self.host, repo_name)
         response = requests.get(path,
                                 cookies={'beegosessionID': self.session_id})
