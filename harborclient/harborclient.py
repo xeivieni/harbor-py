@@ -228,6 +228,22 @@ class HarborClient(object):
                     tag, response.status_code))
         return result
 
+    # DELETE /repositories/{repo_name}/tags/{tag}/labels/{label_id}
+    def create_tag_label(self, repository, tag, label_id):
+        result = False
+        path = '%s://%s/api/repositories/%s/tags/%s/labels/%s' % (self.protocol, self.host, repository, tag, label_id)
+
+        response = requests.delete(path,
+                                 cookies={'beegosessionID': self.session_id})
+        if response.status_code == 200:
+            result = True
+            logging.debug("Successfully deleted label")
+        else:
+            logging.error(
+                    "Failed to delete label {} on tag : {}:{}, response code: {}".format(
+                    label_id, repository, tag, response.status_code))
+        return result
+
     # PUT /users/{user_id}
     def update_user_profile(self, user_id, email, realname, comment):
         # TODO: support not passing comment
